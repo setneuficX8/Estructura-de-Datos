@@ -9,7 +9,7 @@ void aggNodo(){
 }
 
 void verNodo(){
-
+    
 }
 
 int main(){
