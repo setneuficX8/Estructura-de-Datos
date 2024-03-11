@@ -8,7 +8,7 @@ struct pacientes
     char nombre[500];
     int doc=0;
     pacientes *sig;
-}; pacientes *cabeza, *aux, *aux2;
+}; pacientes *cabeza, *aux, *aux2; //declaracion de apuntadores en la cola
 
 
 void aggPaciente(){
@@ -27,23 +27,30 @@ void aggPaciente(){
 
         while (aux2->sig!=NULL)
         {
-            aux2= aux2->sig;
+            aux2= aux2->sig; // se apunta hace siguiente siempre y cuando este no sea nulo
         }
         
         aux2->sig= aux;
         aux2= aux= NULL;
 
             free(aux);
-            free(aux2);
+            free(aux2); // libera la memoria que utilizan
     }
 }
 
 void verPaciente(){
+    int posi=1; pacientes *actual= cabeza;
+
+    while (actual!= NULL)
+    {
+        cout<<"\nPACIENTE "<<posi<<endl;
+        cout<<"\nNOMBRE: "<<actual->nombre<<endl<<"NUMERO DE DOCUMENTO: "<<actual->doc<<"\n";
+        cout<<"----------------------------------";
+        posi++;
+        actual= actual->sig;
+    }
     
-    for(aux=cabeza; aux!=NULL; aux=aux->sig){
-		cout<<"\nNOMBRE: "<<aux->nombre<<"\n";
-        cout<<"\nNUMERO DE DOCUMENTO: "<<aux->doc<<"\n";
-	}
+
 }
 
 int main(){
