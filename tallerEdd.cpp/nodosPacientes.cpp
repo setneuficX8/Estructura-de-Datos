@@ -63,7 +63,7 @@ int main(){
         cout<<"1. AGREGAR UN PACIENTE"<<endl;        
         cout<<"2. VER PACIENTES AGREGADOS"<<endl;
         cout<<"3. SALIR DEL HOSPITALITO\n"<<endl;
-        cin>>op; system("cls");
+        cin>>op; //system("cls");
 
         switch (op)
         {
