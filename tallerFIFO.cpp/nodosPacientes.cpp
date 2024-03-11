@@ -45,12 +45,11 @@ void verPaciente(){
     {
         cout<<"\nPACIENTE "<<posi<<endl;
         cout<<"\nNOMBRE: "<<actual->nombre<<endl<<"NUMERO DE DOCUMENTO: "<<actual->doc<<"\n";
-        cout<<"----------------------------------";
+        cout<<"-----------------------------------";
         posi++;
         actual= actual->sig;
     }
     
-
 }
 
 int main(){
