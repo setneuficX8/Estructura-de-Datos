@@ -1,6 +1,12 @@
 #include <iostream>
 #include <malloc.h>
 
+/*
+CODIFICACION ACREDITADA A:
+    CARLOS ANDRES CIFUENTES MONTAÑO -> 12200106
+    JOSE MANUEL SALAS VALENCIA -> 12200369
+*/
+
 using namespace std;
 
 struct pacientes
