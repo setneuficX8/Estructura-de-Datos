@@ -38,6 +38,18 @@ void aggPaciente(){
 }
 
 void verPaciente(){
+    int posicion=1;
+    pacientes *actual= cabeza;
+
+    while (actual!=NULL)
+    {
+        cout<<"\nPACIENTE "<<posicion<<endl;
+        cout<<"\nNOMBRE: "<<actual->nombre<<endl;
+        cout<<"\nNUMERO DE DOCUMENTO: "<<actual->doc<<endl;
+
+        posicion++;
+        actual= actual->sig;
+    }
     
 }
 
