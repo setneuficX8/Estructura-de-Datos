@@ -5,7 +5,7 @@ using namespace std;
 
 struct pacientes
 {
-    char nombre=' ';
+    char nombre[500];
     int doc=0;
     pacientes *sig;
 }; pacientes *cabeza, *aux, *aux2;
@@ -15,42 +15,35 @@ void aggPaciente(){
     if(cabeza==NULL){
             cabeza= (struct pacientes *) malloc (sizeof(struct pacientes));
 
-            cout<<"\nINGRESE SU NOMBRE: "<<endl; cin>>cabeza->nombre;
+            cout<<"\nINGRESE SU NOMBRE: "<<endl; cin>>cabeza->nombre; cin.ignore(1000, '\n');
             cout<<"\nINGRESE SU NUMERO DE DOCUMENTO: "<<endl; cin>>cabeza->doc;
         cabeza->sig= NULL;
     } else{
         aux= (struct pacientes *) malloc (sizeof(struct pacientes));
-            cout<<"\nINGRESE SU NOMBRE: "<<endl; cin>>aux->nombre;
-            cout<<"\nINGRESE SU NOMBRE: "<<endl; cin>>aux->doc;
-        aux->sig= NULL; aux2= cabeza;
+            cout<<"\nINGRESE SU NOMBRE: "<<endl; cin>>aux->nombre; cin.ignore(1000, '\n');
+            cout<<"\nINGRESE SU NUMERO DE DOCUMENTO: "<<endl; cin>>aux->doc;
+        aux->sig= NULL;
+        aux2= cabeza;
 
         while (aux2->sig!=NULL)
         {
             aux2= aux2->sig;
-            aux2->sig= aux;
-            aux2= aux= NULL;
+        }
+        
+        aux2->sig= aux;
+        aux2= aux= NULL;
 
             free(aux);
             free(aux2);
-        }
-        
     }
 }
 
 void verPaciente(){
-    int posicion=1;
-    pacientes *actual= cabeza;
-
-    while (actual!=NULL)
-    {
-        cout<<"\nPACIENTE "<<posicion<<endl;
-        cout<<"\nNOMBRE: "<<actual->nombre<<endl;
-        cout<<"\nNUMERO DE DOCUMENTO: "<<actual->doc<<endl;
-
-        posicion++;
-        actual= actual->sig;
-    }
     
+    for(aux=cabeza; aux!=NULL; aux=aux->sig){
+		cout<<"\nNOMBRE: "<<aux->nombre<<"\n";
+        cout<<"\nNUMERO DE DOCUMENTO: "<<aux->doc<<"\n";
+	}
 }
 
 int main(){
@@ -63,7 +56,7 @@ int main(){
         cout<<"1. AGREGAR UN PACIENTE"<<endl;        
         cout<<"2. VER PACIENTES AGREGADOS"<<endl;
         cout<<"3. SALIR DEL HOSPITALITO\n"<<endl;
-        cin>>op; //system("cls");
+        cin>>op;
 
         switch (op)
         {
