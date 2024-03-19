@@ -100,12 +100,12 @@ void buscarProducto(){
 
 void quitarProducto(){
 if (kbza == NULL) {
-        cout << "La lista de productos está vacía." << endl;
+        cout << "\nAQUI NO HAY NADA\n"<< endl;
         return;
     }
 
     int idBuscar;
-    cout << "Ingrese el ID del producto que desea quitar: ";
+    cout << "\nINGRESE EL ID DEL PRODUCTO QUE QUIERE BQUITAR DEL INVENTARIO: ";
     cin >> idBuscar;
 
     producto *temp = kbza;
@@ -118,15 +118,15 @@ if (kbza == NULL) {
             } else {
                 anterior->sig = temp->sig;
             }
-            cout << "Producto con ID " << idBuscar << " eliminado correctamente." << endl;
-            free(temp); // Liberar memoria del nodo eliminado
+            cout << "\nPRODUCTO ELIMINADO\n"<< endl;
+            free(temp);
             return;
         }
         anterior = temp;
         temp = temp->sig;
     }
 
-    cout << "No se encontró ningún producto con el ID " << idBuscar << "." << endl;
+    cout << "\nPRODUCTO NO ENCONTRADO\n"<<idBuscar<<endl;
 }
 
 void sumaPrecios(){
