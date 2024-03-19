@@ -7,7 +7,8 @@ JOSE MANUEL SALAS VALENCIA: 12200369
 #include <iostream>
 #include <malloc.h>
 #include <stdlib.h>
-
+/*malloc.h se usa para asignar memoria de forma
+dinamica*/
 using namespace std;
 
 struct producto
