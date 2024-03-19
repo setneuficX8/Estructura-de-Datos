@@ -20,10 +20,10 @@ struct producto
 
 void regisProducto(){
     if(kbza==NULL){
-		kbza= (struct producto *) malloc (sizeof(struct producto));
+		kbza= (struct producto *) malloc (sizeof(struct producto)); // Gestion de memoria
 			
 			cout<<"\nINGRESE EL NOMBRE DEL PRODUCTO A REGISTRAR: "<<endl;
-			cin>>kbza->nombre; cin.ignore(1000, '\n');
+			cin>>kbza->nombre; cin.ignore(1000, '\n'); // Para que no haya alguna irregularidad al momento de ingresar el dato
 			cout<<"\nINGRESE EL ID DEL PRODUCTO A REGISTRAR: "<<endl;
 			cin>>kbza->idp;
 			cout<<"\nINGRESE EL PRECIO DEL PRODUCTO A REGISTRAR: "<<endl;
@@ -34,7 +34,7 @@ void regisProducto(){
 			cout<<"\nSU PRODUCTO HA SIDO REGISTRADO"<<endl;
 		kbza->sig= NULL;
 		} else{
-		aux= (struct producto *) malloc (sizeof(struct producto));
+		aux= (struct producto *) malloc (sizeof(struct producto)); 
 			cout<<"\nINGRESE EL NOMBRE DEL PRODUCTO A REGISTRAR: "<<endl;
 			cin>>aux->nombre; cin.ignore(1000, '\n');
 			cout<<"\nINGRESE EL ID DEL PRODUCTO A REGISTRAR: "<<endl;
@@ -58,7 +58,7 @@ void regisProducto(){
 
 void verInventario(){
     int lugar=1;
-	producto *actuali= kbza;
+	producto *actuali= kbza; // Apunte hacia la dirección y asigna valores
 	
 	cout<<"\n\tESTOS SON LOS PRODUCTOS REGISTRADOS EN EL INVENTARIO\n\n"<<endl;
 	if (actuali!= NULL) {
@@ -77,7 +77,7 @@ void verInventario(){
 }
 
 void buscarProducto(){
-	int auxId=0;
+	int auxId=0; // Sirve como comparador
 	
 	if(kbza==NULL){
 		cout<<"\nJOVEN, NO HAY PRODUCTOS REGISTRADOS"<<endl;
@@ -85,7 +85,7 @@ void buscarProducto(){
 	producto *tempo= kbza;
 	while(tempo!=NULL){
 	cout<<"\nINGRESE EL ID DEL PRODUCTO QUE DESEA BUSCAR: "<<endl; cin>>auxId;
-		if(tempo->idp== auxId){
+		if(tempo->idp== auxId){ // Comparacion
 			cout << "\nSU PRODUCTO HA SIDO ENCONTRADO, SUS DATOS SON:\n" << endl;
             cout << "ID: " << tempo->idp << endl;
             cout << "NOMBRE: " << tempo->nombre << endl;
@@ -112,14 +112,14 @@ if (kbza == NULL) {
     producto *anterior = NULL;
 
     while (temp != NULL) {
-        if (temp->idp == idBuscar) {
+        if (temp->idp == idBuscar) { // Otra comparacion
             if (anterior == NULL) { // Si es el primer nodo
                 kbza = temp->sig;
             } else {
                 anterior->sig = temp->sig;
             }
             cout << "\nPRODUCTO ELIMINADO\n"<< endl;
-            free(temp);
+            free(temp); // Libera memoria porque se saca un producto
             return;
         }
         anterior = temp;
