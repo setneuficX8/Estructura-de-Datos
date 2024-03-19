@@ -18,7 +18,9 @@ struct producto
 
     producto* sig;
 }; producto *kbza, *aux, *aux2;
-
+/*sig se utiliza para generar un enlace entre nodos
+	sig se utiliza para meter un producto de despues del
+	producto ya existente y se da cuando kbeza no es nula*/
 void regisProducto(){
     if(kbza==NULL){
 		kbza= (struct producto *) malloc (sizeof(struct producto)); // Gestion de memoria
