@@ -1,4 +1,5 @@
-/*
+/*	By: Carlos Andres Cifuentes Montaño ->12200106
+
 	Tengo un parqueadero de callejon con ocupacion para Motos y Carros. 
     Los cuales se parquean en sistema LIFO.
 	Los carros tiene un valor de parqueo de 1.000 y motos 500, pero 
