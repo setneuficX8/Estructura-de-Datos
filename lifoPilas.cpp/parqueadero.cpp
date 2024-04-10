@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <malloc.h>
-#include <locale.h>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -26,9 +26,11 @@ struct moto
     moto* sigm;
 };moto *topm, *auxm;
 
+int cuotac=1000;
+int cuotam=500;
+
 void parquearCarro(){
     auxc= ((struct carro *) malloc (sizeof(struct carro)));
-    int cuotac=1000;
 
     cout<<"\nINGRESA EL ID DE TU CARRO: "; cin>>auxc->idc;
     cout<<"INGRESA LA PLACA DE TU CARRO: "; cin>>auxc->plaCarro; cin.ignore(1000, '\n');
@@ -50,7 +52,6 @@ void parquearCarro(){
 
 void parquearMoto(){
     auxm= ((struct moto *) malloc (sizeof(struct moto)));
-    int cuotam=500;
 
     cout<<"\nINGRESA EL ID DE TU MOTO: "; cin>>auxm->idm;
     cout<<"INGRESA LA PLACA DE TU MOTO: "; cin>>auxm->placaMoto; cin.ignore(1000, '\n');
@@ -74,40 +75,91 @@ void verParking(){
     carro* tempCarro= topc; moto* tempMoto= topm;
     int posCarro= 1, posMoto=1;
 
-    if(tempCarro!=NULL){
+    while (tempCarro!=NULL){
         cout<<"\nCARROS PARQUEADOS: \n"<<endl;
+        cout<<"---------------------------------------------"<<endl;
         cout<<"CARRO "<<posCarro<<endl;
-
         cout<<"ID: "<<tempCarro->idc<<endl;
         cout<<"PLACA: "<<tempCarro->plaCarro<<endl;
         cout<<"MARCA: "<<tempCarro->marca<<endl;
         cout<<"MODELO: "<<tempCarro->modelo<<endl;
+        cout<<"---------------------------------------------"<<endl;
 
         tempCarro= tempCarro->sigc; posCarro++;
-
-    } else{
-        cout<<"\nNO HAY CARROS PARQUEADOS\n"<<endl;
-    }
+    } cout<<"NO HAY CARROS"<<endl;
         
-        if(tempMoto!=NULL){
+        while (tempMoto!=NULL){
             cout<<"\nMOTOS PARQUEADAS: \n"<<endl;
-
+            cout<<"---------------------------------------------"<<endl;
             cout<<"MOTO "<<posMoto<<endl;
-
             cout<<"ID: "<<tempMoto->idm<<endl;
             cout<<"PLACA: "<<tempMoto->placaMoto<<endl;
             cout<<"MARCA: "<<tempMoto->marcam<<endl;
             cout<<"MODELO: "<<tempMoto->modelom<<endl;
+            cout<<"---------------------------------------------"<<endl;
 
             tempMoto= tempMoto->sigm; posMoto++;
-        
-        } else{
-            cout<<"\nNO HAY MOTOS PARQUEADAS\n"<<endl;
-        }
+        } cout<<"NO HAY MOTOS"<<endl;
 }
 
-void desparquear(){
+void desparquear(){    
+    int impCarro= 100, impMoto= 50;
+    int sumaCarro=0, sumaMoto= 0;
 
+    carro* tempc1= topc; moto* tempm1= topm;
+    carro* abajoc= NULL; moto* abajom= NULL;
+
+    int idVehi=0;
+
+    cout<<"INGRESE EL ID DEL VEHICULO QUE QUIERE SACAR DEL PARQUEADERO: "<<endl; cin>>idVehi;
+
+    while(tempc1!= NULL){
+        if(tempc1->idc== idVehi){
+            cout<<"CARRO ENCONTRADO, SUS DATOS SON: \n"<<endl;
+
+            cout<<"ID: "<<tempc1->idc<<endl;
+            cout<<"PLACA: "<<tempc1->plaCarro<<endl;
+            cout<<"MARCA: "<<tempc1->marca<<endl;
+            cout<<"MODELO: "<<tempc1->modelo<<endl;
+
+            carro* movCarro= topc;
+            while(movCarro!= tempc1){
+                sumaCarro += impCarro;
+                movCarro= movCarro->sigc;
+            } cout<<"SE PAGA "<<sumaCarro<<" PESOS ADICIONALMENTE"<<endl;
+
+            if(abajoc!= NULL){
+                abajoc->sigc= tempc1->sigc; free(tempc1);
+            } else{
+                topc= tempc1->sigc; free(tempc1);
+            }
+        } abajoc= tempc1;
+        tempc1= tempc1->sigc;
+    }
+
+    while(tempm1!= NULL){
+        if(tempm1->idm== idVehi){
+            cout<<"CARRO ENCONTRADO, SUS DATOS SON: \n"<<endl;
+
+            cout<<"ID: "<<tempm1->idm<<endl;
+            cout<<"PLACA: "<<tempm1->placaMoto<<endl;
+            cout<<"MARCA: "<<tempm1->marcam<<endl;
+            cout<<"MODELO: "<<tempm1->modelom<<endl;
+
+            moto* movMoto= topm;
+            while(movMoto!= tempm1){
+                sumaMoto+= impMoto;
+                movMoto= movMoto->sigm;
+            } cout<<"SE PAGA "<<sumaMoto<<" PESOS ADICIONALMENTE"<<endl;
+
+            if(abajom!= NULL){
+                abajom->sigm= tempm1->sigm; free(tempm1);
+            } else{
+                topm= tempm1->sigm; free(tempm1);
+            }
+        } abajom= tempm1;
+        tempm1= tempm1->sigm;
+    } cout<<"VEHICULO NO ENCONTRADO"<<endl;
 }
 
 int main(){
