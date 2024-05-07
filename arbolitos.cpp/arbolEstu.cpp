@@ -1,6 +1,5 @@
 /*
 CARLOS ANDRES CIFUENTES MONTAÑO -> 12200106
-JOSE MANUEL SALAS VALENCIA -> 12200369
 */
 
 #include <iostream>
@@ -81,36 +80,148 @@ void agregar(){int opc;
 }
 
 void preorden(estudiante *recur){
+    int elec=0;
+    cout<<"1. VER POR CODIGO/2. VER POR FECHA"<<endl; cin>>elec;
+
+    if(elec==1){
         cout<<recur->codigo<<endl;cout<<"----"<<endl;
         if(recur->izq!=NULL){
             preorden(recur->izq);
         } if(recur->dere!=NULL){
             preorden(recur->dere);
         }
+    } if(elec==2){
+        cout<<recur->dia<<"|"<<recur->mes<<"|"<<recur->anio<<endl;
+            cout<<"------"<<endl;
+        if(recur->izq!=NULL){
+            preorden(recur->izq);
+        } if(recur->dere!=NULL){
+            preorden(recur->dere);
+        }
+    }
+        
 }
 
 void inorden(estudiante *recur){
+    int elec=0;
+    cout<<"1. VER POR CODIGO/2. VER POR FECHA"<<endl; cin>>elec;
+
+    if(elec==1){
         if(recur->izq!=NULL){
             inorden(recur->izq);
         }
-            cout<<recur->codigo<<endl; cout<<"------"<<endl;
+            cout<<recur->codigo<<endl;cout<<"------"<<endl;
         if(recur->dere!=NULL){
             inorden(recur->dere);
         }
+    } if(elec==2){
+        if(recur->izq!=NULL){
+            inorden(recur->izq);
+        }
+            cout<<recur->dia<<"|"<<recur->mes<<"|"<<recur->anio<<endl;
+            cout<<"------"<<endl;
+        if(recur->dere!=NULL){
+            inorden(recur->dere);
+        }
+    }
+        
 }
 
 void postorden(estudiante *recur){
+    int elec=0;
+    cout<<"1. VER POR CODIGO/2. VER POR FECHA"<<endl; cin>>elec;
+
+    if(elec==1){
         if(recur->izq!=NULL){
             postorden(recur->izq);
         } if(recur->dere!=NULL){
             postorden(recur->dere);
         }
             cout<<recur->codigo<<endl;cout<<"------"<<endl;
+    } if(elec==2){
+        if(recur->izq!=NULL){
+            postorden(recur->izq);
+        } if(recur->dere!=NULL){
+            postorden(recur->dere);
+        }
+            cout<<recur->dia<<"|"<<recur->mes<<"|"<<recur->anio<<endl;
+            cout<<"------"<<endl;
+    }     
+}
+
+void ubicar(estudiante *reqEstu, int aguja){
+    if(reqEstu->codigo==aguja){
+        aux= reqEstu;
+        return;
+    } else{
+        if(reqEstu->izq!= NULL){
+            ubicar(reqEstu->izq, aguja);
+        } if(reqEstu->dere!=NULL){
+            ubicar(reqEstu->dere, aguja);
+        }
+    } return;
+}
+
+void ubicarPapa(estudiante *papa){
+    if((papa->izq!=NULL)&& (papa->izq!=aux)){
+        ubicarPapa(papa->izq);
+
+        if(papa->izq==aux){
+            aux2= papa;
+        }
+            } if((papa->dere!=NULL)&& (papa->dere!=aux)){
+                ubicarPapa(papa->dere);
+            } if(papa->dere==aux){
+                aux2= papa;
+            }
+    return;
+}
+
+void elimCaso1(){
+    if(aux!=raiz){
+        ubicarPapa(raiz);
+    }   if(aux2->izq==aux){
+            aux2->dere= NULL;
+    }   else if(aux2->dere==aux){
+        aux2->dere= NULL;
+    } free(aux);
+}
+
+void elimCaso2(){
+    if(aux!=raiz){
+        ubicarPapa(raiz);
+    }   if(aux2->izq==aux){
+            if(aux->izq!=NULL){
+                aux2->izq= aux->izq;
+            } else if(aux->dere!=NULL){
+                aux2->izq= aux->dere;
+            }
+    }   else if(aux2->dere==aux){
+        aux2->dere= NULL;
+    } free(aux);
 }
 
 void eliminar(){
+    int nBuscado=0;
 
+    cout<<"INGRESA EL CODIGO DEL NODO QUE BUSCAS: "<<endl; cin>>nBuscado;
+    ubicar(raiz, nBuscado);
 
+    if(nBuscado!=aux->codigo){
+        cout<<"NO SE ENCUENTRA EN EL ARBOL, NODO INEXISTENTE"<<endl;
+    } else{
+        if((aux->dere== NULL) && (aux->izq==NULL)){
+        cout<<"CASO 1, SU NODO ES EL FINAL"<<endl;
+        elimCaso1();
+        } else if((aux->dere==NULL)&&(aux->izq!=NULL)){
+            cout<<"CASO 2, NODO CON HIJOS"<<endl;
+            elimCaso2();
+        }   else if(((aux->dere!=NULL)||(aux->izq==NULL))){
+            cout<<"CASO 2, NODO CON HIJOS"<<endl;
+            elimCaso2();
+        }
+    }
+    return;
 }
 
 int main(){ 
@@ -142,19 +253,3 @@ int main(){
 
     return 0;
 }
-
-/*void recorrido (){
-    aux= raiz;
-    if(raiz!=NULL){
-        preorden(raiz);
-    }
-
-    if(raiz!=NULL){
-        inorden(raiz);
-    }
-
-    if(raiz!=NULL){
-        postorden(raiz);
-    }
-}
-*/
