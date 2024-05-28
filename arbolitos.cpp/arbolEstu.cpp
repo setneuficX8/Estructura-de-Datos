@@ -11,7 +11,7 @@ using namespace std;
 struct estudiante
 {
     char nombre [1000], apellido[1000];
-    int codigo=0, dia=0, mes=0, anio=0;
+    int codigo=0, dia=0, mes=0, anio=0, genero=0;
     estudiante *izq, *dere;    
 }; estudiante *raiz, *aux, *aux2;
 
@@ -61,7 +61,6 @@ void agregar(){int opc;
         cout<<"DIA DE NACIMIENTO: "; cin>>aux->dia;
         cout<<"MES DE NACIMIENTO: ", cin>>aux->mes;
         cout<<"ANIO DE NACIMIENTO: "; cin>>aux->anio;
-
         aux->izq= aux->dere = NULL;
         if(raiz==NULL){
             raiz= aux;
@@ -69,7 +68,7 @@ void agregar(){int opc;
            free(aux); 
         }else {
             aux2= raiz;
-            posXCodigo(); //posXFecha();
+            posXCodigo(); posXFecha();
         }
         cout<<"REGISTRO REALIZADO"<<endl;
         
@@ -235,7 +234,8 @@ int main(){
         cout<<"3. USAR RECORRIDO IN-ORDEN"<<endl;
         cout<<"4. USAR RECORRIDO POST-ORDEN"<<endl;
         cout<<"5. ELIMINAR UN ESTUDIANTE DEL SISTEMA"<<endl;
-        cout<<"6. SALIR"<<endl;
+        cout<<"6. MOSTRAR POR GENEROS"<<endl;
+        cout<<"7. SALIR"<<endl;
 
         cout<<"\nELIGE: "<<endl; cin>>op; system("cls");
 
@@ -247,6 +247,7 @@ int main(){
             case 4: postorden(raiz); break;
             case 5: eliminar(); break;
             case 6: cout<<"GRACIAS POR USAR EL SERVICIO"<<endl; break;
+            case 7: mostrarGenero(raiz); break;
             default: cout<<"ESA OPCION NO EXISTE, ELIJA LO DEL MENU"<<endl; break;
         }
     } while (op!=6); system ("pause");
