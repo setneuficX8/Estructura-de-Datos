@@ -32,7 +32,7 @@ struct viaje
                 free(auxv); 
                 }else {
                     auxv2= raizv;
-                }
+                } 
                 */
 
 int obtenerAltura(struct viaje *n) {
@@ -117,6 +117,13 @@ struct viaje* insertar(struct viaje* nodo, struct viaje* auxv) {
     return nodo;
 }
 
+//FUNCION PARA GENERAR EL IDENTIFICADOR PARA EL VIAJE HECHO
+void genIdev(viaje* v) {
+    snprintf(v->ideViaje, sizeof(v->ideViaje), "%c%c%04d%02d%02d",
+             v->matricula[0], v->matricula[1],
+             v->anio, v->mes, v->dia);
+}
+
 int regViaje(){ int opc=0;
     struct viaje* auxv= (struct viaje*) malloc (sizeof(struct viaje));
 
@@ -129,7 +136,7 @@ int regViaje(){ int opc=0;
         cout<<"MES: "; cin>>auxv->mes;
         cout<<"ANIO: "; cin>>auxv->anio;
         auxv->izqv=NULL; auxv->derv=NULL; auxv->altura=1;
-        raizv= insertar(raizv, auxv);
+        genIdev(auxv); raizv= insertar(raizv, auxv);
 
         cout<<"REGISTRO REALIZADO"<<endl;
         
@@ -149,7 +156,23 @@ int regViaje(){ int opc=0;
     }
 }
     
-int regPasajero(){
+
+
+int listarViaje(viaje* nodo){
+    if (nodo != NULL) {
+        listarViaje(nodo->izqv);
+        cout<<"\n\tVIAJES REGISTRADOS\t\n"; cout<<"\n"<<endl;
+        cout << "IDENTIFICADOR DEL VIAJE: " << nodo->ideViaje << endl;
+        cout << "NOMBRE DEL VIAJE: " << nodo->nomEmbarc << endl;
+        cout << "PRECIO: " << nodo->precio << endl;
+        cout << "DESTINO: " << nodo->destino << endl;
+        cout << "CAPACIDAD: " << nodo->capacidad << endl;
+        cout << "MATRICULA: " << nodo->matricula << endl;
+        cout << "DIA: " << nodo->dia << endl;
+        cout << "MES: " << nodo->mes << endl;
+        cout << "ANIO: " << nodo->anio << endl;
+        listarViaje(nodo->derv);
+    }
 
     return 0;
 }
@@ -157,7 +180,7 @@ int regPasajero(){
 int buscarViaje(){ char idevBusc[999]; int opv=0;
     cout<<"INGRESA EL IDENTIFICADOR DEL VIAJE QUE BUSCAS: "<<endl; cin>>idevBusc;
 
-    if(idevBusc==auxv->ideViaje){
+    if(strcmp(idevBusc, auxv->ideViaje)==0){
         cout<<"VIAJE ENCONTRADO, LOS DATOS SON: \n"<<endl;
 
         cout<<"NOMBRE DEL VIAJE: "<<auxv->nomEmbarc<<endl;
@@ -180,7 +203,7 @@ int buscarViaje(){ char idevBusc[999]; int opv=0;
     } return 0;
 }
 
-int listarViaje(){
+int regPasajero(){
 
     return 0;
 }
@@ -202,21 +225,21 @@ do
         cout<<"\nBIENVENIDO AL SISTEMA DE TRANSPORTE FLUVIAL DEL PACIFICO\n"<<endl;
         cout<<"1. REGISTRAR VIAJE"<<endl;
         cout<<"2. BUSCAR VIAJE"<<endl;
-        cout<<"3. LISTAR VIAJES"<<endl;
+        cout<<"3. LISTADO DE VIAJES"<<endl;
         cout<<"4. ELIMINAR VIAJE"<<endl;
         cout<<"5. REGISTRAR PASAJERO A UN VIAJE"<<endl;
-        cout<<"6. LISTAR PASAJEROS DEL VIAJE"<<endl;
+        cout<<"6. LISTADO DE PASAJEROS DEL VIAJE"<<endl;
         cout<<"7. SALIR"<<endl;
 
         cout<<"\nELIGE: "<<endl; cin>>opc; system("cls");
 
         switch (opc)
         {    case 1: regViaje(); break;
-             case 2: ; break;
-             case 3: ; break;
-             case 4: ; break;
-             case 5: ; break;
-             case 6: ; break;
+             case 2: buscarViaje(); break;
+             case 3: listarViaje(raizv); break;
+             case 4: quitarVaije(); break;
+             case 5: regPasajero(); break;
+             case 6: listarPasajero(); break;
              case 7: cout<<"GRACIAS POR USAR EL SERVICIO, ADIOS"<<endl; break;
             
             default: cout<<"OPCION NO EXISTENTE, ELIJA LO MOSTRADO POR EL MENU"<<endl; break;
