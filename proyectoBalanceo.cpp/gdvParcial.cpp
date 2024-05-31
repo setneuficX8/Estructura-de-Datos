@@ -155,13 +155,11 @@ int regViaje(){ int opc=0;
         inordenViaje(v->derv);
     }
 }
-    
-
 
 int listarViaje(viaje* nodo){
     if (nodo != NULL) {
         listarViaje(nodo->izqv);
-        cout<<"\n\tVIAJES REGISTRADOS\t\n"; cout<<"\n"<<endl;
+        cout<<"\n\tVIAJES REGISTRADOS\t\n"<<endl;
         cout << "IDENTIFICADOR DEL VIAJE: " << nodo->ideViaje << endl;
         cout << "NOMBRE DEL VIAJE: " << nodo->nomEmbarc << endl;
         cout << "PRECIO: " << nodo->precio << endl;
@@ -177,32 +175,40 @@ int listarViaje(viaje* nodo){
     return 0;
 }
 
-int buscarViaje(){ char idevBusc[999]; int opv=0;
+int buscarViaje(){ char idevBusc[999]; int opv=0; viaje *actual= raizv;
     cout<<"INGRESA EL IDENTIFICADOR DEL VIAJE QUE BUSCAS: "<<endl; cin>>idevBusc;
 
-    if(strcmp(idevBusc, auxv->ideViaje)==0){
+    if(actual!= NULL){
+        if(strcmp(idevBusc, actual->ideViaje)==0){
         cout<<"VIAJE ENCONTRADO, LOS DATOS SON: \n"<<endl;
 
-        cout<<"NOMBRE DEL VIAJE: "<<auxv->nomEmbarc<<endl;
-        cout<<"PRECIO: "<<auxv->precio<<endl;
-        cout<<"DESTINO: "<<auxv->destino<<endl;
-        cout<<"CAPACIDAD: "<<auxv->capacidad<<endl;
-        cout<<"MATRICULA: "<<auxv->matricula<<endl;
-        cout<<"IDENTIFICADOR: "<<auxv->ideViaje<<endl;
-        cout<<"DIA: "<<auxv->dia<<endl;
-        cout<<"MES: "<<auxv->mes<<endl;
-        cout<<"ANIO: "<<auxv->anio<<endl;
+        cout<<"NOMBRE DEL VIAJE: "<<actual->nomEmbarc<<endl;
+        cout<<"PRECIO: "<<actual->precio<<endl;
+        cout<<"DESTINO: "<<actual->destino<<endl;
+        cout<<"CAPACIDAD: "<<actual->capacidad<<endl;
+        cout<<"MATRICULA: "<<actual->matricula<<endl;
+        cout<<"IDENTIFICADOR: "<<actual->ideViaje<<endl;
+        cout<<"DIA: "<<actual->dia<<endl;
+        cout<<"MES: "<<actual->mes<<endl;
+        cout<<"ANIO: "<<actual->anio<<endl;
 
-    } else{
-        cout<<"EL VIAJE NO SE ENCUENTRA, QUIERE BUSCAR OTRO? (1. SI/2.NO)\n"<<endl; cin>>opv;
+        } else if(strcmp(idevBusc, actual->ideViaje)<0){
+                actual= actual->izqv;
+            } else{
+                actual= actual->derv;
+            }
+    } cout<<"EL VIAJE NO SE ENCUENTRA, QUIERE BUSCAR OTRO? (1. SI/2.NO)\n"<<endl; cin>>opv;
         if(opv==1){
             buscarViaje();
         } else{
             cout<<"OK, ADIOS"<<endl;
-        }
-    } return 0;
-}
+        } return 0;
+    } 
 
+int quitarVaije(){
+
+    return 0;
+}
 int regPasajero(){
 
     return 0;
@@ -213,19 +219,14 @@ int listarPasajero(){
     return 0;
 }
 
-int quitarVaije(){
-
-    return 0;
-}
-
 int main(){
     int opc=0;
 do
     {
         cout<<"\nBIENVENIDO AL SISTEMA DE TRANSPORTE FLUVIAL DEL PACIFICO\n"<<endl;
         cout<<"1. REGISTRAR VIAJE"<<endl;
-        cout<<"2. BUSCAR VIAJE"<<endl;
-        cout<<"3. LISTADO DE VIAJES"<<endl;
+        cout<<"2. LISTADO DE VIAJES"<<endl;
+        cout<<"3. BUSCAR VIAJE"<<endl;
         cout<<"4. ELIMINAR VIAJE"<<endl;
         cout<<"5. REGISTRAR PASAJERO A UN VIAJE"<<endl;
         cout<<"6. LISTADO DE PASAJEROS DEL VIAJE"<<endl;
@@ -235,8 +236,8 @@ do
 
         switch (opc)
         {    case 1: regViaje(); break;
-             case 2: buscarViaje(); break;
-             case 3: listarViaje(raizv); break;
+             case 2: listarViaje(raizv); break;
+             case 3: buscarViaje(); break;
              case 4: quitarVaije(); break;
              case 5: regPasajero(); break;
              case 6: listarPasajero(); break;
