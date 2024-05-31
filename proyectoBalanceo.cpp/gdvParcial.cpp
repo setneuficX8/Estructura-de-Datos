@@ -206,16 +206,33 @@ int buscarViaje(){ char idevBusc[999]; int opv=0; viaje *actual= raizv;
     } 
 
 int quitarVaije(){
+//Eliminar Viaje: Eliminar un viaje del sistema utilizando su identificador único.
 
+//aun no puedo tocar esta parte
     return 0;
 }
 int regPasajero(){
-
+//Registrar Pasajero: Registrar pasajeros en un viaje específico utilizando una estructura FIFO.
+ //El número de pasajeros no debe exceder la capacidad de la embarcación.
+ struct viaje* top,*capacidad;
+   if(top<=capacidad){
+   		struct pasajero* auxp2= (struct pasajero*) malloc (sizeof(struct pasajero)); 
+   	cout<<"NOMBRE DEL PASAJERO: "<<endl;
+   	cin>> auxp2->nomPasa;
+   	cout<<"NUMERO DE DOCUMENTO DEL PASAJERO: "<<endl;
+   	cin>> auxp2->doc;
+   	regViaje();
+   }else{
+   	cout<<"los viajes excedieron la capacidad, no se puede registrar."<<endl;
+   	
+   }
+ //no registra en un viaje ya existente pero puede ser base para uno nuevo.
     return 0;
 }
 
 int listarPasajero(){
-
+cout << "\n\tPASAJEROS DEL VIAJE " << v->ideViaje << "\n" << endl;
+    inordenPasajeros(v->raizp);//error en v->raizp no se que hacer
     return 0;
 }
 
