@@ -146,9 +146,8 @@ int regViaje(){ int opc=0;
 }
 
 int listarViaje(viaje* nodo){
-    if (nodo != NULL) {
+    if (nodo != NULL) {cout<<"\n\tVIAJES REGISTRADOS\t\n"<<endl;
         listarViaje(nodo->izqv);
-        cout<<"\n\tVIAJES REGISTRADOS\t\n"<<endl;
         cout << "IDENTIFICADOR DEL VIAJE: " << nodo->ideViaje << endl;
         cout << "NOMBRE DEL VIAJE: " << nodo->nomEmbarc << endl;
         cout << "PRECIO: " << nodo->precio << endl;
@@ -180,18 +179,19 @@ int buscarViaje(){ char idevBusc[999]; int opv=0; viaje *actual= raizv;
         cout<<"DIA: "<<actual->dia<<endl;
         cout<<"MES: "<<actual->mes<<endl;
         cout<<"ANIO: "<<actual->anio<<endl;
-
-        } else if(strcmp(idevBusc, actual->ideViaje)<0){
+        } /*
+        else if(strcmp(idevBusc, actual->ideViaje)<0){
                 actual= actual->izqv;
             } else{
                 actual= actual->derv;
             }
-    } cout<<"QUIERE BUSCAR OTRO VIAJE? (1. SI/2.NO)\n"<<endl; cin>>opv;
+        */  
+    }   cout<<"QUIERE BUSCAR OTRO VIAJE? (1. SI/2.NO)\n"<<endl; cin>>opv;
         if(opv==1){
             buscarViaje();
         } else{
             cout<<"OK, ADIOS"<<endl;
-        } return 0;
+        }   return 0;
     } 
 
 // FUNCION PARA EL NODO MENOR, SIRVE PARA EL BALANCEO
@@ -259,7 +259,7 @@ viaje* buscId(viaje *vnodo, char idv[999]){
     }
 }
 
-int regPasajero(){ //viaje* //tviaje=raizv;
+int regPasajero(){
     char idReg[999];
     
     cout<<"\nINGRESA EL ID DEL VIAJE PARA AGREGAR UN PASAJERO: "<<endl; cin>>idReg;
@@ -291,15 +291,15 @@ int listarPasajero(){ char idVb[999]; int opci=0;
     viaje *busv= buscId(raizv, idVb); if(busv==NULL){
         cout<<"NO SE ENCUENTRA EL VIAJE SOLICITADO"<<endl;
         cout<<"QUIERES BUSCAR OTRO?: 1.SI/2.NO"<<endl; cin>>opci;
-
         if(opci==1){
             listarPasajero();
         } else{
             cout<<"DE NADA, VUELVA PRONTO"<<endl;
         }
-    } cout<<"\nPASAJEROS DEL VIAJE "<<busv->ideViaje<<" HACIA "<<busv->destino<<endl; cout<<"\n"<<endl;
+    } 
     pasajero * verp= busv->kbza;
     if(verp!= NULL){
+        cout<<"\nPASAJEROS DEL VIAJE\n"; cout<<busv->ideViaje<<" HACIA "<<busv->destino<<endl; cout<<"\n"<<endl;
         cout<<"NOMBRE: "<<verp->nomPasa<<", NUMERO DE ID: "<<verp->doc<<endl;
     }
 
