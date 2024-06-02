@@ -14,26 +14,15 @@ using namespace std;
 struct pasajero {
     char nomPasa[999];
     int doc=0;
-    pasajero *izqp, *derp;
-}; pasajero *raizp, *auxp, *auxp2;
+    pasajero* sig;
+}; pasajero *auxp;
 
 struct viaje
 {
     char nomEmbarc[999], destino[999], matricula[999], ideViaje[999];
-    int precio=0, capacidad=0, dia=0, mes=0, anio=0, altura;
-    viaje *izqv, *derv;
-}; viaje *raizv, *auxv;
-
-    /* ESTO SE PONE POR SI ACASO AL FINAL DE REGISTRAR
-                auxv->izqv= auxv->derv = NULL;
-                if(raizv==NULL){
-                    raizv= auxv;
-                    auxv= NULL;
-                free(auxv); 
-                }else {
-                    auxv2= raizv;
-                } 
-                */
+    int precio=0, capacidad=0, dia=0, mes=0, anio=0, altura, nPasajeros=0;
+    viaje *izqv, *derv; pasajero* kbza, *k2;
+}; viaje *raizv, *auxv; 
 
 int obtenerAltura(struct viaje *n) {
     if (n == NULL) {
@@ -147,7 +136,7 @@ int regViaje(){ int opc=0;
             cout<<"OK"<<endl;
         } return 0;
     }
-    
+
     void inordenViaje(struct viaje *v) {
     if (v != NULL) {
         inordenViaje(v->izqv);
@@ -197,7 +186,7 @@ int buscarViaje(){ char idevBusc[999]; int opv=0; viaje *actual= raizv;
             } else{
                 actual= actual->derv;
             }
-    } cout<<"EL VIAJE NO SE ENCUENTRA, QUIERE BUSCAR OTRO? (1. SI/2.NO)\n"<<endl; cin>>opv;
+    } cout<<"QUIERE BUSCAR OTRO VIAJE? (1. SI/2.NO)\n"<<endl; cin>>opv;
         if(opv==1){
             buscarViaje();
         } else{
@@ -205,16 +194,114 @@ int buscarViaje(){ char idevBusc[999]; int opv=0; viaje *actual= raizv;
         } return 0;
     } 
 
-int quitarVaije(){
+// FUNCION PARA EL NODO MENOR, SIRVE PARA EL BALANCEO
+viaje* menor(viaje* nodo) {
+    viaje* actual = nodo;
+    while (actual->izqv != NULL) {
+        actual = actual->izqv;
+    }
+    return actual;
+}
+
+// FUNCION PARA ELIMINAR UN VIAJE, EN SI ES LA LOGICA APENAS
+viaje* borrar(viaje* raiz, char ideViaje[999]) {
+    if (raiz == NULL) {
+        return raiz;
+    }
+
+    if (strcmp(ideViaje, raiz->ideViaje) < 0) {
+        raiz->izqv = borrar(raiz->izqv, ideViaje);
+    } else if (strcmp(ideViaje, raiz->ideViaje) > 0) {
+        raiz->derv = borrar(raiz->derv, ideViaje);
+    } else {
+        if ((raiz->izqv == NULL) || (raiz->derv == NULL)) {
+            viaje* btempo = raiz->izqv ? raiz->izqv : raiz->derv;
+            if (btempo == NULL) {
+                btempo = raiz;
+                raiz = NULL;
+            } else {
+                *raiz = *btempo;
+            }
+            free(btempo);
+        } else {
+            viaje* btempo = menor(raiz->derv);
+            strcpy(raiz->ideViaje, btempo->ideViaje);
+            raiz->derv = borrar(raiz->derv, btempo->ideViaje);
+        }
+    } return 0;
+}
+
+int quitarVaije(){ viaje* verif= raizv;
+    char idevBorrar[999];
+
+    if(verif!= NULL){
+        cout<<"INGRESE EL IDENTIFICADOR DEL VIAJE QUE DESEA QUITAR: "<<endl; cin>>idevBorrar;
+        if(strcmp(idevBorrar, verif->ideViaje)==0){
+            cout<<"EL VIAJE "<<verif->ideViaje<<" HA SIDO ENCONTRADO PARA BORRARSE"<<endl;
+            raizv= borrar(raizv, idevBorrar); cout<<"VIAJE ELIMINADO"<<endl;
+            
+            if(strcmp(idevBorrar, verif->ideViaje)<0){
+                verif= verif->izqv;
+            } else{
+                verif= verif->derv;
+            }
+        }
+    } return 0;
+}
+
+viaje* buscId(viaje *vnodo, char idv[999]){
+    if(vnodo==NULL || strcmp(vnodo->ideViaje, idv)==0){
+        return vnodo;
+    } if(strcmp(idv, vnodo->ideViaje)<0){
+        return buscId(vnodo->izqv, idv);
+    } else{
+        return buscId(vnodo->derv, idv);
+    }
+}
+
+int regPasajero(){ //viaje* //tviaje=raizv;
+    char idReg[999];
+    
+    cout<<"\nINGRESA EL ID DEL VIAJE PARA AGREGAR UN PASAJERO: "<<endl; cin>>idReg;
+
+    viaje *tviaje= buscId(raizv, idReg);
+    if(tviaje==NULL){
+        cout<<"\nVIAJE NO EXISTENTE\n"<<endl; return 0;
+    } if(tviaje->nPasajeros>= tviaje->capacidad){
+        cout<<"\nVIAJE LLENO, EL TOPE HA SIDO ALCANZADO"<<endl; return 0;
+    }
+
+    auxp= (struct pasajero*) malloc(sizeof(struct pasajero));
+    cout<<"\nINGRESA TU NOMBRE: "<<endl; cin>>auxp->nomPasa;
+    cout<<"INGRESA TU NUMERO DE ID: "<<endl; cin>>auxp->doc;
+    auxp->sig=NULL;
+
+    if(tviaje->kbza==NULL){
+        tviaje->kbza= auxp; tviaje->k2= auxp;
+    } else{
+        tviaje->kbza->sig= auxp; tviaje->k2= auxp;
+    } tviaje->nPasajeros++;
 
     return 0;
 }
-int regPasajero(){
 
-    return 0;
-}
+int listarPasajero(){ char idVb[999]; int opci=0;
+    cout<<"INGRESE EL ID DEL VIAJE QUE BUSCAS PARA VER SU LISTADO: "<<endl; cin>>idVb;
 
-int listarPasajero(){
+    viaje *busv= buscId(raizv, idVb); if(busv==NULL){
+        cout<<"NO SE ENCUENTRA EL VIAJE SOLICITADO"<<endl;
+        cout<<"QUIERES BUSCAR OTRO?: 1.SI/2.NO"<<endl; cin>>opci;
+
+        if(opci==1){
+            listarPasajero();
+        } else{
+            cout<<"DE NADA, VUELVA PRONTO"<<endl;
+        }
+    } cout<<"\nPASAJEROS DEL VIAJE "<<busv->ideViaje<<" HACIA "<<busv->destino<<endl; cout<<"\n"<<endl;
+    pasajero * verp= busv->kbza;
+    if(verp!= NULL){
+        cout<<"NOMBRE: "<<verp->nomPasa<<", NUMERO DE ID: "<<verp->doc<<endl;
+    }
 
     return 0;
 }
