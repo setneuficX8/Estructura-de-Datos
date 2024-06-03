@@ -8,6 +8,7 @@ REALIZADO POR:
 #include <malloc.h>
 #include <stdlib.h>
 #include <ctime>
+#include <cstring>
 
 using namespace std;
 
@@ -23,14 +24,6 @@ struct viaje
     int precio=0, capacidad=0, dia=0, mes=0, anio=0, altura, nPasajeros=0, matricula=0, idViaje=0;
     viaje *izqv, *derv; pasajero* kbza, *k2;
 }; viaje *raizv, *auxv;
-/*
-int generarIDViaje(viaje *v) { //ME GENERA EL ID PARA EL VIAJE
-    int digMtri= v->matricula/10000;
-    v->idViaje= digMtri * 100000000 + v->anio * 10000 + v->mes * 100 + v->dia;
-    //int idViaje = generarIDViaje(); PARA ASIGNAR EL VALOR Y MOSTRAR EN LA FUNCION REGISTRAR
-    return 0;//o tambien idViaje
-}
-*/
 
 int obtenerAltura(viaje *n) {
     if (n == NULL) {
@@ -154,6 +147,7 @@ int regViaje(){
     cout<<"\nUSTED HA REGISTRADO LO SIGUIENTE: \n"<<endl;
     cout<<"NOMBRE: "<<auxv->nomViaje<<endl;
     cout<<"DESTINO: "<<auxv->destino<<endl;
+    cout<<"CAPACIDAD: "<<auxv->capacidad<<endl;
     cout<<"FECHA: ANIO "<<auxv->anio<<", MES "<<auxv->mes<<", DIA "<<auxv->dia<<endl;
     cout<<"MATRICULA: "<<auxv->matricula<<endl;
     cout<<"ID DEL VIAJE: "<<auxv->idViaje<<endl;
@@ -176,26 +170,178 @@ int listarViaje(viaje* nv){;
     if(nv!=NULL){
         cout<<"NOMBRE: "<<nv->nomViaje<<endl;
         cout<<"DESTINO: "<<nv->destino<<endl;
-        cout<<"FECHA: ANIO "<<auxv->anio<<", MES "<<auxv->mes<<", DIA "<<auxv->dia<<endl;
-        cout<<"MATRICULA: "<<auxv->matricula<<endl;
-        cout<<"ID DEL VIAJE: "<<auxv->idViaje<<endl; cout<<"-----------------------------------"<<endl;
+        cout<<"CAPACIDAD: "<<nv->capacidad<<endl; 
+        cout<<"FECHA: ANIO "<<nv->anio<<", MES "<<nv->mes<<", DIA "<<nv->dia<<endl;
+        cout<<"MATRICULA: "<<nv->matricula<<endl;
+        cout<<"ID DEL VIAJE: "<<nv->idViaje<<endl; cout<<"-----------------------------------"<<endl;
         listarViaje(nv->izqv);
         listarViaje(nv->derv);
     }   return 0;
 }
 
-int buscarViaje(){
+int buscarViaje(){ int idBuscar;
+    cout<<"\nINGRESA EL ID DEL VIAJE QUE BUSCAS: "; cin>>idBuscar;
+    viaje* baux= raizv;
+
+    while(baux!=NULL){
+        if(baux->idViaje==idBuscar){
+        cout<<"\nVIAJE ENCONTRADO, LOS DATOS SON: \n"<<endl;
+        cout<<"NOMBRE: "<<baux->nomViaje<<endl;
+        cout<<"DESTINO: "<<baux->destino<<endl;
+        cout<<"CAPACIDAD: "<<baux->capacidad<<endl;
+        cout<<"FECHA: ANIO "<<baux->anio<<", MES "<<baux->mes<<", DIA "<<auxv->dia<<endl;
+        cout<<"MATRICULA: "<<baux->matricula<<endl;
+        cout<<"ID DEL VIAJE: "<<baux->idViaje<<endl; return 1;
+        } else if(baux->idViaje<idBuscar){
+            baux= baux->izqv;
+        } else{
+            baux= baux->derv;
+        }
+    } cout<<"\nVIAJE NO ENCONTRADO, NO COINCIDE\n"<<endl; int opb=0;
+    cout<<"QUIERE BUSCAR DE NUEVO? (1.SI/2.NO)\n"<<endl;cin>>opb;
+    if(opb==1){
+        buscarViaje();
+    }else{
+        cout<<"OK\n"<<endl;
+    }
 
     return 0;
+}
+
+viaje* minimo(viaje* nodo) {
+    viaje* actual = nodo;
+    while (actual && actual->izqv != NULL)
+        actual = actual->izqv;
+    return actual;
+}
+
+viaje* eliminar(viaje* nodo, int idEliminar) {
+    if (nodo == NULL)
+        return nodo;
+
+    if (idEliminar < nodo->idViaje)
+        nodo->izqv = eliminar(nodo->izqv, idEliminar);
+    else if (idEliminar > nodo->idViaje)
+        nodo->derv = eliminar(nodo->derv, idEliminar);
+    else {
+        if (nodo->izqv == NULL || nodo->derv == NULL) {
+            viaje* temp = nodo->izqv ? nodo->izqv : nodo->derv;
+            if (temp == NULL) {
+                temp = nodo;
+                nodo = NULL;
+            } else
+                *nodo = *temp;
+            free(temp);
+        } else {
+            viaje* temp = minimo(nodo->derv);
+            nodo->idViaje = temp->idViaje;
+            nodo->derv = eliminar(nodo->derv, temp->idViaje);
+        }
+    }
+
+    if (nodo == NULL)
+        return nodo;
+
+    nodo->altura = 1 + mayor(obtenerAltura(nodo->izqv), obtenerAltura(nodo->derv));
+
+    int balance = obtenerBalance(nodo);
+
+    if (balance > 1 && obtenerBalance(nodo->izqv) >= 0)
+        return rotarDerecha(nodo);
+
+    if (balance > 1 && obtenerBalance(nodo->izqv) < 0) {
+        nodo->izqv = rotarIzquierda(nodo->izqv);
+        return rotarDerecha(nodo);
+    }
+
+    if (balance < -1 && obtenerBalance(nodo->derv) <= 0)
+        return rotarIzquierda(nodo);
+
+    if (balance < -1 && obtenerBalance(nodo->derv) > 0) {
+        nodo->derv = rotarDerecha(nodo->derv);
+        return rotarIzquierda(nodo);
+    }
+
+    return nodo;
 }
 
 int quitarViaje(){
+    int idElim;
+    cout<<"INGRESE EL ID DEL VIAJE QUE QUIERE ELIMINAR: "<<endl;cin>>idElim;
 
-    return 0;
+    viaje* nodoActual = raizv;
+    viaje* padre = NULL;
+
+    while (nodoActual != NULL) {
+        if (idElim == nodoActual->idViaje) {
+            if (nodoActual->izqv == NULL || nodoActual->derv == NULL) {
+                viaje* temp = nodoActual->izqv ? nodoActual->izqv : nodoActual->derv;
+                if (padre == NULL) {
+                    raizv = temp;
+                } else if (padre->izqv == nodoActual) {
+                    padre->izqv = temp;
+                } else {
+                    padre->derv = temp;
+                }
+                free(nodoActual);
+            } else {
+                viaje* temp = minimo(nodoActual->derv);
+                nodoActual->idViaje = temp->idViaje;
+                nodoActual->derv = eliminar(nodoActual->derv, temp->idViaje);
+            }
+            cout << "EL VIAJE HA SIDO ELIMINADO EXITOSAMENTE.\n";
+            return 0;
+        } else if (idElim < nodoActual->idViaje) {
+            padre = nodoActual;
+            nodoActual = nodoActual->izqv;
+        } else {
+            padre = nodoActual;
+            nodoActual = nodoActual->derv;
+        }
+    }    return 0;
+}
+
+viaje *buscarAux(viaje* raizv, int vbusc){
+    if(raizv==NULL){
+        return NULL;
+    }
+
+    if(vbusc < raizv->idViaje){
+        return buscarAux(raizv->izqv, vbusc);
+    } else if(vbusc> raizv->idViaje){
+        return buscarAux(raizv->derv, vbusc);
+    } else{
+        return raizv;
+    }
 }
 
 int regPasajero(){
+    int asoViaje; viaje* encont;
 
+    cout<<"INGRESA EL ID DEL VIAJE PARA INGRESAR PASAJEROS: ";cin>>asoViaje;
+    encont= buscarAux(raizv, asoViaje);
+    
+    if(encont==NULL){
+        cout<<"\nNO HAY VIAJE CON ESE ID\n"<<endl;
+    } if(encont!=NULL && encont->nPasajeros>=encont->capacidad){
+        cout<<"\nVIAJE LLENO\n"<<endl;
+    } if(encont->nPasajeros <= encont->capacidad){
+        pasajero* auxp= ((struct pasajero *)malloc(sizeof(struct pasajero)));
+        cout<<"INGRESA TU NOMBRE: "; cin>>auxp->nomPasajero; cin.ignore();
+        cout<<"INGRESA TU NUMERO DE ID: "; cin>>auxp->doc;
+        cout<<"\nREGISTRO REALIZADO\n"<<endl;
+        auxp->sig=NULL;
+        encont->nPasajeros++;
+
+        if(encont->kbza==NULL){
+            encont->kbza=auxp;
+            encont->k2= auxp;
+            } else{
+                encont->k2->sig= auxp;
+                encont->k2= auxp;
+            } encont->kbza=auxp; encont->k2= auxp;
+        } 
+    
     return 0;
 }
 
@@ -232,4 +378,4 @@ do
         }
     } while (opc!=7); system ("pause");
     return 0;
-}
+} //VARIOS DIAS SIN DORMIR BIEN PROFE, PERO AQUI ESTA EL TRABAJO
