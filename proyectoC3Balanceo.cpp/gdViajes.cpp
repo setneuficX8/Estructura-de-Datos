@@ -323,7 +323,7 @@ int regPasajero(){
     
     if(encont==NULL){
         cout<<"\nNO HAY VIAJE CON ESE ID\n"<<endl;
-    } if(encont!=NULL && encont->nPasajeros>=encont->capacidad){
+    } if(encont->nPasajeros>encont->capacidad){
         cout<<"\nVIAJE LLENO\n"<<endl;
     } if(encont->nPasajeros <= encont->capacidad){
         pasajero* auxp= ((struct pasajero *)malloc(sizeof(struct pasajero)));
@@ -339,14 +339,28 @@ int regPasajero(){
             } else{
                 encont->k2->sig= auxp;
                 encont->k2= auxp;
-            } encont->kbza=auxp; encont->k2= auxp;
+            }
         } 
     
     return 0;
 }
 
 int listarPasajeros(){
+    int idbv;
+    cout<<"INGRESA EL ID DEL VIAJE PARA VER EL LISTADO: "; cin>>idbv;
 
+    viaje* enc= buscarAux(raizv, idbv);
+
+    if(enc==NULL){
+        cout<<"\nNO VIAJE CON ESE ID\n"<<endl;
+    }   pasajero* paux= enc->kbza;
+        if(enc!=NULL){
+                cout<<"NOMBRE: "<<paux->nomPasajero<<endl;
+                cout<<"NUMERO DEL ID: "<<paux->doc<<endl;
+                cout<<"----------------------------------------"<<endl;
+                paux= auxp->sig;
+        }
+    
     return 0;
 }
 
